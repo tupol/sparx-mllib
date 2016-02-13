@@ -1,0 +1,62 @@
+# Spark application developer can edit this file for automated job submission
+# through Ansible by Jenkins.
+# ref. howard@lunatech.com Jan 2016
+
+# App assembly jar
+mlx_jar: demoprediction_2.10-0.1.0-SNAPSHOT-assembly.jar
+
+# Target directory to copy files to Spark driver host in YARN cluster.
+mlx_jar_path: "{{ mlx_t_dir }}/{{ mlx_jar }}"
+
+# Where to fetch Spark app assembly jar: local | artifactory
+mlx_jar_location: artifactory
+
+# Spark app jar is located on remote artifactory server
+mlx_artifactory_url_prefix: https://lrv152oe.europe.intranet/artifactory/mlx-snapshot-local/nl/ing/mlx/demoprediction_2.10/0.1.0-SNAPSHOT
+
+# Your application's main class (for Java / Scala apps).
+# No need to specify if you have only one main entry point.
+mlx_main_class: "nl.ing.mlx.kddcup99.streaming.StreamPredictor"
+
+# Name of your application.
+mlx_app_name: "kddcup99.predict"
+
+# Number of cores used by the driver, only in cluster mode (Default: 1).
+mlx_spark_driver_cores: 1
+
+# Memory for driver (e.g. 1000M, 2G) (Default: 1024M).
+mlx_spark_driver_memory: 1G
+
+# Number of executors to launch (Default: 2).
+mlx_spark_num_executors: 3
+
+# Number of cores per executor. (Default: 1 in YARN mode, or all available cores on the worker in standalone mode)
+mlx_spark_executor_cores: 1
+
+# Memory per executor (e.g. 1000M, 2G) (Default: 1G).
+mlx_spark_executor_memory: 1G
+
+# List of extra Spark configuration properties.
+mlx_spark_property: 
+  - spark.task.maxFailures=1
+
+# Path to a file from which to load extra properties. If not specified, this will look for conf/spark-defaults.conf.
+#mlx_spark_properties_file: FILE
+
+# Data files in HDFS.
+mlx_hdfs_host: ""
+mlx_data_hdfs_dir: /user/spark
+
+# Application arguments
+mlx_app_args: >
+  app.input.file.training="{{ mlx_data_hdfs_dir }}/demo-anod/data/kddcup.data"
+  app.input.file.test="{{ mlx_data_hdfs_dir }}/demo-anod/data/kddcup.testdata.unlabeled"
+  app.output.path="{{ mlx_data_hdfs_dir }}/out"
+  app.wip.path="{{ mlx_data_hdfs_dir }}/wip"
+  app.input.streaming.training="{{ mlx_data_hdfs_dir }}/in/train"
+  app.input.streaming.testing="{{ mlx_data_hdfs_dir }}/in/test"
+  app.streaming.checkpoint="/tmp/"
+  app.streaming.batch.seconds="20"
+  app.prediction.models="{{ mlx_data_hdfs_dir }}/out/kmeans_1E-10_140_0050_01_L2NormV1.model.xmd.bin,{{ mlx_data_hdfs_dir }}/out/kmeans_1E-10_150_0050_01_L2NormV1.model.xmd.bin"
+
+# vi: sw=2

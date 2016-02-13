@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <bean id="analyseInputData" class="com.lunatic.mlx.kddcup99.mllib.modgen.AnalyseInputData"/>
+    <bean id="educateTransformers" class="com.lunatic.mlx.kddcup99.mllib.modgen.EducateTransformers"/>
+    <bean id="splitTrainingData" class="com.lunatic.mlx.kddcup99.mllib.modgen.SplitTrainingData"/>
+    <bean id="preProcessData" class="com.lunatic.mlx.kddcup99.mllib.modgen.PreProcessData"/>
+    <bean id="trainKMeans" class="com.lunatic.mlx.kddcup99.mllib.modgen.TrainKMeans"/>
+    <bean id="thresholdsGenerator" class="com.lunatic.mlx.kddcup99.mllib.modgen.ThresholdsGenerator"/>
+    <bean id="predictKMeans" class="com.lunatic.mlx.kddcup99.mllib.modgen.PredictKMeans"/>
+
+    <bean id="workflow" class="com.lunatic.spring.ListConverter" factory-method="toScala">
+        <constructor-arg type="java.util.List">
+            <list>
+                <ref bean="analyseInputData"/>
+                <ref bean="educateTransformers"/>
+                <ref bean="splitTrainingData"/>
+                <ref bean="preProcessData"/>
+                <ref bean="trainKMeans"/>
+                <ref bean="thresholdsGenerator"/>
+                <ref bean="predictKMeans"/>
+            </list>
+        </constructor-arg>
+    </bean>
+
+</beans>
